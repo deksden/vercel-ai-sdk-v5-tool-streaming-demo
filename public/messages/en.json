@@ -1,0 +1,34 @@
+{
+  "chat": {
+    "title": "Vercel AI SDK v5 Demo:: Tool Streaming",
+    "subtitle": "Ask me to create a project and watch the real-time progress!",
+    "welcome": "Welcome to AI Chat!",
+    "welcomeText": "Try asking me to create a project. For example:",
+    "placeholder": "Type a message...",
+    "sendButton": "Send",
+    "thinking": "Thinking...",
+    "suggestions": {
+      "simple": "Create a simple web application called 'Portfolio Site'",
+      "medium": "Build a medium-complexity dashboard named 'Analytics Dashboard'",  
+      "complex": "Develop a complex e-commerce platform called 'Online Store Pro'"
+    }
+  },
+  "progress": {
+    "projectCreated": "Project \"{projectName}\" created successfully",
+    "creatingProject": "Creating project \"{projectName}\"",
+    "startingProject": "Starting project \"{projectName}\"",
+    "steps": "steps",
+    "inProgress": "in progress...",
+    "executionTime": "Execution time:",
+    "complexity": {
+      "simple": "simple",
+      "medium": "medium", 
+      "complex": "complex"
+    }
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  }
+}

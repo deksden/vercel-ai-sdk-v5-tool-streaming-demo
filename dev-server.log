@@ -1,0 +1,404 @@
+
+> ai-sdk-tool-streaming@0.1.0 dev /Users/deksden/Documents/_Projects/vercel-ai-sdk-v5-tool-streaming-demo
+> next dev --turbopack
+
+   ▲ Next.js 15.4.5 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.17:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 860ms
+ ○ Compiling / ...
+ ✓ Compiled / in 4.3s
+🎨 Theme set from ENV: dark
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 4641ms
+🎨 Theme set from ENV: dark
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 107ms
+   Reload env: .env.local
+ ✓ Compiled in 6ms
+ ✓ Compiled / in 11ms
+🎨 Theme set from ENV: light
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 278ms
+🎨 Theme set from ENV: light
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 78ms
+   Reload env: .env.local
+ ✓ Compiled in 516ms
+ ✓ Compiled / in 136ms
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 460ms
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 40ms
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 51ms
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 63ms
+ ○ Compiling /api/chat ...
+ ✓ Compiled /api/chat in 872ms
+=== API Chat Request ===
+Received messages: [
+  {
+    "role": "user",
+    "parts": [
+      {
+        "type": "text",
+        "text": "Please create an analytics dashboard called 'Analytics Dashboard' with medium complexity"
+      }
+    ],
+    "id": "iPTy0J3bCBu0636e"
+  }
+]
+API Key present: true
+API Key length: 39
+Converting messages...
+Converted messages: [
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "Please create an analytics dashboard called 'Analytics Dashboard' with medium complexity"
+      }
+    ]
+  }
+]
+Using gemini-2.5-flash model with streaming...
+StreamText created with streaming writer
+UI Message Stream created, returning response
+Stream chunk type: tool-input-start
+Stream chunk type: tool-input-delta
+[STREAMING] Starting Analytics Dashboard project creation with medium complexity
+[STREAMING] Step 1/5: Initializing Analytics Dashboard project structure - STARTED
+Stream chunk type: tool-call
+Tool call: {
+  "type": "tool-call",
+  "toolCallId": "wTxM9oMdYC4bzkaQ",
+  "toolName": "sampleCreateStreamingTool",
+  "input": {
+    "projectName": "Analytics Dashboard",
+    "complexity": "medium"
+  }
+}
+[STREAMING] Step 1/5: Initializing Analytics Dashboard project structure - COMPLETED (1.1s)
+[STREAMING] Step 2/5: Setting up development environment - STARTED
+[STREAMING] Step 2/5: Setting up development environment - COMPLETED (1.1s)
+[STREAMING] Step 3/5: Installing dependencies - STARTED
+[STREAMING] Step 3/5: Installing dependencies - COMPLETED (1.2s)
+[STREAMING] Step 4/5: Configuring build tools - STARTED
+[STREAMING] Step 4/5: Configuring build tools - COMPLETED (1.3s)
+[STREAMING] Step 5/5: Setting up testing framework - STARTED
+[STREAMING] Step 5/5: Setting up testing framework - COMPLETED (1.3s)
+[STREAMING] Project Analytics Dashboard creation completed in 6.0s
+Stream chunk type: tool-result
+Tool result: {
+  "type": "tool-result",
+  "toolCallId": "wTxM9oMdYC4bzkaQ",
+  "toolName": "sampleCreateStreamingTool",
+  "input": {
+    "projectName": "Analytics Dashboard",
+    "complexity": "medium"
+  },
+  "output": {
+    "success": true,
+    "projectName": "Analytics Dashboard",
+    "complexity": "medium",
+    "steps": [
+      {
+        "id": "1",
+        "title": "Initializing Analytics Dashboard project structure",
+        "status": "completed",
+        "startTime": 1754194061755,
+        "endTime": 1754194062903
+      },
+      {
+        "id": "2",
+        "title": "Setting up development environment",
+        "status": "completed",
+        "startTime": 1754194062903,
+        "endTime": 1754194064018
+      },
+      {
+        "id": "3",
+        "title": "Installing dependencies",
+        "status": "completed",
+        "startTime": 1754194064018,
+        "endTime": 1754194065202
+      },
+      {
+        "id": "4",
+        "title": "Configuring build tools",
+        "status": "completed",
+        "startTime": 1754194065202,
+        "endTime": 1754194066506
+      },
+      {
+        "id": "5",
+        "title": "Setting up testing framework",
+        "status": "completed",
+        "startTime": 1754194066506,
+        "endTime": 1754194067804
+      }
+    ],
+    "totalTimeSeconds": "6.0",
+    "message": "Successfully created Analytics Dashboard project (medium complexity) in 6.0 seconds!"
+  }
+}
+ POST /api/chat 200 in 9192ms
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 65ms
+=== API Chat Request ===
+Received messages: [
+  {
+    "role": "user",
+    "parts": [
+      {
+        "type": "text",
+        "text": "Build a medium-complexity dashboard named 'Analytics Dashboard'"
+      }
+    ],
+    "id": "dUrz98PfQmoaGpEo"
+  }
+]
+API Key present: true
+API Key length: 39
+Converting messages...
+Converted messages: [
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "Build a medium-complexity dashboard named 'Analytics Dashboard'"
+      }
+    ]
+  }
+]
+Using gemini-2.5-flash model with streaming...
+StreamText created with streaming writer
+UI Message Stream created, returning response
+Stream chunk type: tool-input-start
+Stream chunk type: tool-input-delta
+[STREAMING] Starting Analytics Dashboard project creation with medium complexity
+[STREAMING] Step 1/5: Initializing Analytics Dashboard project structure - STARTED
+Stream chunk type: tool-call
+Tool call: {
+  "type": "tool-call",
+  "toolCallId": "fJSaCJI4EpImv6Uk",
+  "toolName": "sampleCreateStreamingTool",
+  "input": {
+    "projectName": "Analytics Dashboard",
+    "complexity": "medium"
+  }
+}
+ POST /api/chat 200 in 1906ms
+🌍 Detected browser language: ru-RU
+🌍 Slavic language detected, using Russian
+Chat status: ready
+Chat isLoading: false
+Messages count: 0
+Current input: 
+ GET / 200 in 57ms
+=== API Chat Request ===
+Received messages: [
+  {
+    "role": "user",
+    "parts": [
+      {
+        "type": "text",
+        "text": "Build a simple web application project named 'Portfolio Website'"
+      }
+    ],
+    "id": "JcEktwBiOfLkobhk"
+  }
+]
+API Key present: true
+API Key length: 39
+Converting messages...
+Converted messages: [
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "Build a simple web application project named 'Portfolio Website'"
+      }
+    ]
+  }
+]
+Using gemini-2.5-flash model with streaming...
+StreamText created with streaming writer
+UI Message Stream created, returning response
+[STREAMING] Step 1/5: Initializing Analytics Dashboard project structure - COMPLETED (1.2s)
+[STREAMING] Step 2/5: Setting up development environment - STARTED
+Stream chunk type: tool-input-start
+Stream chunk type: tool-input-delta
+[STREAMING] Starting Portfolio Website project creation with simple complexity
+[STREAMING] Step 1/3: Initializing Portfolio Website project structure - STARTED
+Stream chunk type: tool-call
+Tool call: {
+  "type": "tool-call",
+  "toolCallId": "L3HBtB9R2r3D44qR",
+  "toolName": "sampleCreateStreamingTool",
+  "input": {
+    "projectName": "Portfolio Website",
+    "complexity": "simple"
+  }
+}
+[STREAMING] Step 2/5: Setting up development environment - COMPLETED (1.1s)
+[STREAMING] Step 3/5: Installing dependencies - STARTED
+ POST /api/chat 200 in 1393ms
+[STREAMING] Step 1/3: Initializing Portfolio Website project structure - COMPLETED (0.7s)
+[STREAMING] Step 2/3: Setting up development environment - STARTED
+[STREAMING] Step 3/5: Installing dependencies - COMPLETED (1.2s)
+[STREAMING] Step 4/5: Configuring build tools - STARTED
+[STREAMING] Step 2/3: Setting up development environment - COMPLETED (1.0s)
+[STREAMING] Step 3/3: Installing dependencies - STARTED
+[STREAMING] Step 3/3: Installing dependencies - COMPLETED (0.7s)
+[STREAMING] Project Portfolio Website creation completed in 2.4s
+Stream chunk type: tool-result
+Tool result: {
+  "type": "tool-result",
+  "toolCallId": "L3HBtB9R2r3D44qR",
+  "toolName": "sampleCreateStreamingTool",
+  "input": {
+    "projectName": "Portfolio Website",
+    "complexity": "simple"
+  },
+  "output": {
+    "success": true,
+    "projectName": "Portfolio Website",
+    "complexity": "simple",
+    "steps": [
+      {
+        "id": "1",
+        "title": "Initializing Portfolio Website project structure",
+        "status": "completed",
+        "startTime": 1754194072533,
+        "endTime": 1754194073263
+      },
+      {
+        "id": "2",
+        "title": "Setting up development environment",
+        "status": "completed",
+        "startTime": 1754194073263,
+        "endTime": 1754194074238
+      },
+      {
+        "id": "3",
+        "title": "Installing dependencies",
+        "status": "completed",
+        "startTime": 1754194074238,
+        "endTime": 1754194074939
+      }
+    ],
+    "totalTimeSeconds": "2.4",
+    "message": "Successfully created Portfolio Website project (simple complexity) in 2.4 seconds!"
+  }
+}
+[STREAMING] Step 4/5: Configuring build tools - COMPLETED (1.2s)
+[STREAMING] Step 5/5: Setting up testing framework - STARTED
+[STREAMING] Step 5/5: Setting up testing framework - COMPLETED (1.2s)
+[STREAMING] Project Analytics Dashboard creation completed in 6.0s
+Stream chunk type: tool-result
+Tool result: {
+  "type": "tool-result",
+  "toolCallId": "fJSaCJI4EpImv6Uk",
+  "toolName": "sampleCreateStreamingTool",
+  "input": {
+    "projectName": "Analytics Dashboard",
+    "complexity": "medium"
+  },
+  "output": {
+    "success": true,
+    "projectName": "Analytics Dashboard",
+    "complexity": "medium",
+    "steps": [
+      {
+        "id": "1",
+        "title": "Initializing Analytics Dashboard project structure",
+        "status": "completed",
+        "startTime": 1754194070514,
+        "endTime": 1754194071679
+      },
+      {
+        "id": "2",
+        "title": "Setting up development environment",
+        "status": "completed",
+        "startTime": 1754194071680,
+        "endTime": 1754194072791
+      },
+      {
+        "id": "3",
+        "title": "Installing dependencies",
+        "status": "completed",
+        "startTime": 1754194072791,
+        "endTime": 1754194074028
+      },
+      {
+        "id": "4",
+        "title": "Configuring build tools",
+        "status": "completed",
+        "startTime": 1754194074029,
+        "endTime": 1754194075250
+      },
+      {
+        "id": "5",
+        "title": "Setting up testing framework",
+        "status": "completed",
+        "startTime": 1754194075251,
+        "endTime": 1754194076465
+      }
+    ],
+    "totalTimeSeconds": "6.0",
+    "message": "Successfully created Analytics Dashboard project (medium complexity) in 6.0 seconds!"
+  }
+}
