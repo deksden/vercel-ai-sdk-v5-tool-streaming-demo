@@ -6,7 +6,7 @@ A Next.js application demonstrating Vercel AI SDK v5 (beta) capabilities with Go
 
 ## 🎬 Demo
 
-<video src="streaming-demo.mp4" width="800" controls></video>
+<video src="https://github.com/user-attachments/assets/f3e5f2a0-92a9-4bc5-b8df-e73da69bc6fd" width="800" controls></video>
 
 *See the AI tool streaming in action with real-time progress updates*
 
