@@ -10,6 +10,10 @@ A Next.js application demonstrating Vercel AI SDK v5 (beta) capabilities with Go
 
 *See the AI tool streaming in action with real-time progress updates*
 
+### 📖 Want to understand how this works?
+
+**[📋 Complete Technical Implementation Guide](.memory-bank/real-time-streaming-implementation.md)** - Step-by-step guide showing exactly how to implement real-time tool progress streaming with Vercel AI SDK v5. Includes full code examples, data flow diagrams, and debugging tips.
+
 ## Features
 
 - **AI Chat Interface**: Modern chat UI built with shadcn/ui components
@@ -210,7 +214,8 @@ npm run lint
 
 ## Technical Documentation
 
-See `.memory-bank/product.md` for detailed technical specifications, implementation notes, and reference documentation.
+- **Real-Time Streaming Implementation**: [Technical Guide](.memory-bank/real-time-streaming-implementation.md) - Complete implementation guide for AI tool progress streaming
+- **Product Specifications**: [Product Documentation](.memory-bank/product.md) - Detailed technical specifications and reference documentation
 
 ## Troubleshooting
 

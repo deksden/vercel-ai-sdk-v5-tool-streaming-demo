@@ -1,24 +1,26 @@
 # Real-Time Tool Progress Streaming Implementation Guide
 
-## Техническое решение для реального времени стриминга прогресса инструментов в AI SDK v5
+**📚 Languages:** [English](real-time-streaming-implementation.md) | [Русский](real-time-streaming-implementation_ru.md)
 
-Этот документ описывает полную реализацию real-time streaming прогресса выполнения инструментов от сервера к клиенту с использованием Vercel AI SDK v5 beta.
+## Technical Solution for Real-Time Tool Progress Streaming in AI SDK v5
 
----
-
-## 🎯 Основная концепция
-
-**Проблема**: Стандартные инструменты AI SDK отправляют только начальное и конечное состояние, пользователь не видит промежуточный прогресс длительных операций.
-
-**Решение**: Использование `createUIMessageStream` с кастомными `data parts` для streaming промежуточных обновлений прогресса в реальном времени.
+This document describes the complete implementation of real-time streaming of tool execution progress from server to client using Vercel AI SDK v5 beta.
 
 ---
 
-## 🏗️ Архитектура решения
+## 🎯 Core Concept
+
+**Problem**: Standard AI SDK tools send only initial and final states, users don't see intermediate progress of long-running operations.
+
+**Solution**: Using `createUIMessageStream` with custom `data parts` for streaming intermediate progress updates in real-time.
+
+---
+
+## 🏗️ Solution Architecture
 
 ### 1. Server-Side Streaming (API Route)
 
-**Файл**: `src/app/api/chat/route.ts`
+**File**: `src/app/api/chat/route.ts`
 
 ```typescript
 import { 
@@ -34,37 +36,37 @@ export async function POST(req: Request) {
   const { messages }: { messages: MyUIMessage[] } = await req.json()
   const convertedMessages = convertToModelMessages(messages)
 
-  // 🎯 Ключевая часть: createUIMessageStream с writer
+  // 🎯 Key part: createUIMessageStream with writer
   const stream = createUIMessageStream<MyUIMessage>({
     execute: ({ writer }) => {
       const result = streamText({
         model: google('gemini-2.5-flash'),
         messages: convertedMessages,
         tools: {
-          // Передаем writer в инструмент для отправки progress updates
+          // Pass writer to tool for sending progress updates
           sampleCreateStreamingTool: sampleCreateStreamingTool(writer),
         },
       })
       
-      // Объединяем стандартный поток AI с нашими кастомными данными
+      // Merge standard AI stream with our custom data
       writer.merge(result.toUIMessageStream())
     }
   })
   
-  // Возвращаем streaming response
+  // Return streaming response
   return createUIMessageStreamResponse({ stream })
 }
 ```
 
-**Ключевые моменты:**
-- `createUIMessageStream<MyUIMessage>` - создает поток с кастомными типами данных
-- `writer` - объект для отправки progress updates в реальном времени
-- `writer.merge()` - объединяет стандартный AI поток с кастомными данными
-- `createUIMessageStreamResponse()` - правильный способ возврата streaming response
+**Key Points:**
+- `createUIMessageStream<MyUIMessage>` - creates stream with custom data types
+- `writer` - object for sending progress updates in real-time
+- `writer.merge()` - combines standard AI stream with custom data
+- `createUIMessageStreamResponse()` - proper way to return streaming response
 
 ### 2. Streaming Tool Implementation
 
-**Файл**: `src/lib/tools.ts`
+**File**: `src/lib/tools.ts`
 
 ```typescript
 export const sampleCreateStreamingTool = (writer: any) => tool({
@@ -73,7 +75,7 @@ export const sampleCreateStreamingTool = (writer: any) => tool({
   execute: async ({ projectName, complexity }, { toolCallId }) => {
     const steps = getStepsForComplexity(complexity, projectName)
     
-    // 📡 Отправляем начальное состояние
+    // 📡 Send initial state
     writer.write({
       type: 'data-toolProgress',
       id: toolCallId,
@@ -88,15 +90,15 @@ export const sampleCreateStreamingTool = (writer: any) => tool({
       }
     })
     
-    // 🔄 Пошаговое выполнение с real-time updates
+    // 🔄 Step-by-step execution with real-time updates
     for (let i = 0; i < steps.length; i++) {
       const step = steps[i]
       const stepStartTime = Date.now()
       
-      // Обновляем шаг как "в процессе"
+      // Update step as "in-progress"
       completedSteps[i] = { ...step, status: 'in-progress', startTime: stepStartTime }
       
-      // 📡 Отправляем промежуточное обновление
+      // 📡 Send intermediate update
       writer.write({
         type: 'data-toolProgress',
         id: toolCallId,
@@ -111,14 +113,14 @@ export const sampleCreateStreamingTool = (writer: any) => tool({
         }
       })
       
-      // Симулируем работу
+      // Simulate work
       await delay(workTime)
       
-      // Отмечаем шаг как завершенный
+      // Mark step as completed
       const stepEndTime = Date.now()
       completedSteps[i] = { ...completedSteps[i], status: 'completed', endTime: stepEndTime }
       
-      // 📡 Отправляем обновление о завершении шага
+      // 📡 Send step completion update
       writer.write({
         type: 'data-toolProgress',
         id: toolCallId,
@@ -134,7 +136,7 @@ export const sampleCreateStreamingTool = (writer: any) => tool({
       })
     }
     
-    // 📡 Финальное обновление
+    // 📡 Final update
     writer.write({
       type: 'data-toolProgress',
       id: toolCallId,
@@ -150,25 +152,25 @@ export const sampleCreateStreamingTool = (writer: any) => tool({
       }
     })
     
-    return { /* стандартный результат инструмента */ }
+    return { /* standard tool result */ }
   },
 })
 ```
 
-**Ключевые моменты:**
-- `writer.write()` - отправляет data part клиенту в реальном времени
-- `type: 'data-toolProgress'` - кастомный тип данных для прогресса
-- `id: toolCallId` - уникальный идентификатор для связывания обновлений
-- Множественные `writer.write()` вызовы для каждого этапа прогресса
+**Key Points:**
+- `writer.write()` - sends data part to client in real-time
+- `type: 'data-toolProgress'` - custom data type for progress
+- `id: toolCallId` - unique identifier for linking updates
+- Multiple `writer.write()` calls for each progress stage
 
 ### 3. TypeScript Type Definitions
 
-**Файл**: `src/types/chat.ts`
+**File**: `src/types/chat.ts`
 
 ```typescript
 import { UIMessage } from 'ai'
 
-// 🎯 Кастомный UIMessage тип с data parts для прогресса
+// 🎯 Custom UIMessage type with data parts for progress
 export type MyUIMessage = UIMessage<
   never,
   {
@@ -194,14 +196,14 @@ export interface ProgressStep {
 }
 ```
 
-**Ключевые моменты:**
-- Расширение `UIMessage` с кастомными data parts
-- Типизация `toolProgress` для progress updates
-- Полная типизация для TypeScript safety
+**Key Points:**
+- Extending `UIMessage` with custom data parts
+- Typing `toolProgress` for progress updates
+- Full typing for TypeScript safety
 
 ### 4. Client-Side Streaming Handling
 
-**Файл**: `src/components/chat/chat-interface.tsx`
+**File**: `src/components/chat/chat-interface.tsx`
 
 ```typescript
 import { useChat } from '@ai-sdk/react'
@@ -213,7 +215,7 @@ export function ChatInterface() {
   const { messages, sendMessage, status } = useChat<MyUIMessage>({
     transport: new DefaultChatTransport({ api: '/api/chat' }),
     
-    // 🎯 Ключевая часть: обработка streaming data parts
+    // 🎯 Key part: handling streaming data parts
     onData: (dataPart) => {
       console.log('=== Received data part ===', dataPart)
       
@@ -221,7 +223,7 @@ export function ChatInterface() {
         const progress = dataPart.data
         console.log('Tool progress update:', progress)
         
-        // 🔄 Обновляем состояние прогресса в реальном времени
+        // 🔄 Update progress state in real-time
         setToolProgresses(prev => ({
           ...prev,
           [progress.toolCallId]: {
@@ -238,21 +240,21 @@ export function ChatInterface() {
   })
 
   return (
-    // UI компоненты отображают toolProgresses в реальном времени
+    // UI components display toolProgresses in real-time
     <MessageList messages={messages} toolProgresses={toolProgresses} />
   )
 }
 ```
 
-**Ключевые моменты:**
-- `useChat<MyUIMessage>` - типизированный hook с кастомными data parts
-- `onData` callback - обрабатывает все streaming data parts
-- `dataPart.type === 'data-toolProgress'` - фильтрация progress updates
-- Состояние `toolProgresses` обновляется в реальном времени
+**Key Points:**
+- `useChat<MyUIMessage>` - typed hook with custom data parts
+- `onData` callback - handles all streaming data parts
+- `dataPart.type === 'data-toolProgress'` - filtering progress updates
+- `toolProgresses` state updates in real-time
 
 ### 5. UI Components for Progress Display
 
-**Файл**: `src/components/chat/message-list.tsx`
+**File**: `src/components/chat/message-list.tsx`
 
 ```typescript
 export function MessageList({ messages, toolProgresses }: MessageListProps) {
@@ -264,7 +266,7 @@ export function MessageList({ messages, toolProgresses }: MessageListProps) {
             <div className="flex justify-start">
               <div className="bg-muted text-foreground px-4 py-2 rounded-lg">
                 {message.parts.map((part, index) => {
-                  // 🎯 Обработка кастомных data parts
+                  // 🎯 Handle custom data parts
                   if (part.type === 'data-toolProgress') {
                     return (
                       <div key={index} className="mt-2">
@@ -272,7 +274,7 @@ export function MessageList({ messages, toolProgresses }: MessageListProps) {
                       </div>
                     )
                   }
-                  // ... обработка других типов частей
+                  // ... handle other part types
                 })}
               </div>
             </div>
@@ -286,45 +288,45 @@ export function MessageList({ messages, toolProgresses }: MessageListProps) {
 
 ---
 
-## 🔄 Поток данных (Data Flow)
+## 🔄 Data Flow
 
 ```
-1. [Client] Отправляет сообщение через useChat
+1. [Client] Sends message through useChat
               ↓
-2. [Server] API route получает запрос
+2. [Server] API route receives request
               ↓
-3. [Server] createUIMessageStream создает поток с writer
+3. [Server] createUIMessageStream creates stream with writer
               ↓
-4. [Server] streamText вызывает sampleCreateStreamingTool(writer)
+4. [Server] streamText calls sampleCreateStreamingTool(writer)
               ↓
-5. [Tool] Начинает выполнение, вызывает writer.write() для каждого этапа
+5. [Tool] Starts execution, calls writer.write() for each stage
               ↓
-6. [Server] writer отправляет data parts клиенту в реальном времени
+6. [Server] writer sends data parts to client in real-time
               ↓
-7. [Client] onData callback получает каждый data part
+7. [Client] onData callback receives each data part
               ↓
-8. [Client] setToolProgresses обновляет UI state
+8. [Client] setToolProgresses updates UI state
               ↓
-9. [Client] UI компоненты re-render с новым прогрессом
+9. [Client] UI components re-render with new progress
               ↓
-10. [User] Видит live progress updates в реальном времени! 🎉
+10. [User] Sees live progress updates in real-time! 🎉
 ```
 
 ---
 
-## 📡 Формат Streaming Data
+## 📡 Streaming Data Format
 
-### Server отправляет:
+### Server sends:
 ```typescript
 writer.write({
-  type: 'data-toolProgress',        // Тип кастомных данных
-  id: 'w83GXlGuKYfHPJyt',          // toolCallId для связывания
+  type: 'data-toolProgress',        // Custom data type
+  id: 'w83GXlGuKYfHPJyt',          // toolCallId for linking
   data: {
     toolCallId: 'w83GXlGuKYfHPJyt',
     projectName: 'FinalTest',
     complexity: 'simple',
-    currentStep: 2,                 // Текущий выполняемый этап
-    totalSteps: 3,                  // Общее количество этапов
+    currentStep: 2,                 // Current executing stage
+    totalSteps: 3,                  // Total number of stages
     steps: [
       {
         id: '1',
@@ -336,22 +338,22 @@ writer.write({
       {
         id: '2', 
         title: 'Setting up development environment',
-        status: 'in-progress',       // Текущий активный этап
+        status: 'in-progress',       // Current active stage
         startTime: 1754051009668
       },
       {
         id: '3',
         title: 'Installing dependencies', 
-        status: 'pending'            // Еще не начат
+        status: 'pending'            // Not started yet
       }
     ],
-    status: 'in-progress',           // Общий статус: 'started' | 'in-progress' | 'completed'
-    totalTimeSeconds: undefined     // Заполняется при завершении
+    status: 'in-progress',           // Overall status: 'started' | 'in-progress' | 'completed'
+    totalTimeSeconds: undefined     // Filled when completed
   }
 })
 ```
 
-### Client получает:
+### Client receives:
 ```typescript
 onData: (dataPart) => {
   // dataPart.type === 'data-toolProgress'
@@ -362,9 +364,9 @@ onData: (dataPart) => {
 
 ---
 
-## 📊 Отладка и мониторинг
+## 📊 Debugging and Monitoring
 
-### Server-side логи:
+### Server-side logs:
 ```
 [STREAMING] Starting FinalTest project creation with simple complexity
 [STREAMING] Step 1/3: Initializing FinalTest project structure - STARTED
@@ -376,7 +378,7 @@ onData: (dataPart) => {
 [STREAMING] Project FinalTest creation completed in 3.9s
 ```
 
-### Client-side логи:
+### Client-side logs:
 ```
 === Received data part === {type: data-toolProgress, id: w83GXlGuKYfHPJyt, ...}
 Tool progress update: {toolCallId: w83GXlGuKYfHPJyt, projectName: FinalTest, ...}
@@ -385,25 +387,25 @@ Tool progresses: {w83GXlGuKYfHPJyt: Object}
 
 ---
 
-## 🎯 Ключевые особенности реализации
+## 🎯 Key Implementation Features
 
-### ✅ Что работает:
-1. **Real-time streaming**: Обновления отправляются немедленно при изменении состояния
-2. **Type safety**: Полная типизация TypeScript для всех data parts
-3. **State reconciliation**: Одинаковый `id` позволяет обновлять существующие data parts
-4. **Error handling**: Graceful fallback при ошибках streaming
-5. **Performance**: Эффективная передача только измененных данных
+### ✅ What works:
+1. **Real-time streaming**: Updates sent immediately when state changes
+2. **Type safety**: Full TypeScript typing for all data parts
+3. **State reconciliation**: Same `id` allows updating existing data parts
+4. **Error handling**: Graceful fallback when streaming errors occur
+5. **Performance**: Efficient transmission of only changed data
 
-### 🔧 Технические детали:
-- **Метод возврата**: `createUIMessageStreamResponse({ stream })` - правильный способ для AI SDK v5
-- **Writer usage**: Инструмент принимает `writer` как параметр для отправки updates
-- **Data part naming**: `type: 'data-toolProgress'` - соглашение о наименовании
-- **ID management**: `toolCallId` используется как уникальный идентификатор
-- **State updates**: `writer.write()` можно вызывать много раз для одного `id`
+### 🔧 Technical details:
+- **Return method**: `createUIMessageStreamResponse({ stream })` - correct way for AI SDK v5
+- **Writer usage**: Tool accepts `writer` as parameter for sending updates
+- **Data part naming**: `type: 'data-toolProgress'` - naming convention
+- **ID management**: `toolCallId` used as unique identifier
+- **State updates**: `writer.write()` can be called multiple times for same `id`
 
 ---
 
-## 📚 Ссылки на документацию
+## 📚 Documentation References
 
 ### AI SDK v5 Documentation:
 - [AI SDK 5 Beta Announcement](https://ai-sdk.dev/docs/announcing-ai-sdk-5-beta)
@@ -416,22 +418,22 @@ Tool progresses: {w83GXlGuKYfHPJyt: Object}
 - [Stream Object Reference](https://ai-sdk.dev/docs/reference/ai-sdk-core/stream-object)
 
 ### Key API Methods:
-- `createUIMessageStream<T>()` - создание кастомного UI message stream
-- `createUIMessageStreamResponse()` - возврат streaming response
-- `writer.write()` - отправка кастомных data parts
-- `writer.merge()` - объединение потоков
-- `useChat<T>()` - типизированный chat hook
-- `onData` callback - обработчик streaming data parts
+- `createUIMessageStream<T>()` - create custom UI message stream
+- `createUIMessageStreamResponse()` - return streaming response
+- `writer.write()` - send custom data parts
+- `writer.merge()` - merge streams
+- `useChat<T>()` - typed chat hook
+- `onData` callback - streaming data parts handler
 
 ---
 
-## 🎉 Результат
+## 🎉 Result
 
-Полная реализация real-time streaming прогресса инструментов:
-- ✅ Пользователи видят live progress updates
-- ✅ Каждый этап отображается с реальным временем выполнения  
-- ✅ Seamless integration с AI SDK v5 beta
-- ✅ Type-safe implementation с TypeScript
-- ✅ Scalable архитектура для любых long-running операций
+Complete implementation of real-time tool progress streaming:
+- ✅ Users see live progress updates
+- ✅ Each stage displayed with real execution time  
+- ✅ Seamless integration with AI SDK v5 beta
+- ✅ Type-safe implementation with TypeScript
+- ✅ Scalable architecture for any long-running operations
 
-**Эта реализация демонстрирует передовые возможности современных AI-приложений с real-time user experience!** 🚀
+**This implementation demonstrates cutting-edge capabilities of modern AI applications with real-time user experience!** 🚀
